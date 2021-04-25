@@ -15,6 +15,8 @@ class CreateFacilitiesTable extends Migration
     {
         Schema::create('facilities', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('boarding_house_id');
+            $table->string('facility_name');
             $table->timestamps();
         });
     }

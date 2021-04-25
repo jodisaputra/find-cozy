@@ -15,6 +15,10 @@ class CreateReviewsTable extends Migration
     {
         Schema::create('reviews', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('boarding_house_id');
+            $table->integer('rate');
+            $table->text('comment');
+            $table->unsignedBigInteger('created_by');
             $table->timestamps();
         });
     }

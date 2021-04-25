@@ -15,6 +15,10 @@ class CreateBoardingRoomsTable extends Migration
     {
         Schema::create('boarding_rooms', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('boarding_house_id');
+            $table->string('name');
+            $table->enum('status', ['available', 'not_available']);
+            $table->bigInteger('price');
             $table->timestamps();
         });
     }

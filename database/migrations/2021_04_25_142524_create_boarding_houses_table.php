@@ -15,7 +15,7 @@ class CreateBoardingHousesTable extends Migration
     {
         Schema::create('boarding_houses', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('user_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->string('address');
             $table->string('map_url')->nullable();

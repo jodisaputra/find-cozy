@@ -15,6 +15,8 @@ class CreateBoardingHouseImagesTable extends Migration
     {
         Schema::create('boarding_house_images', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('boarding_house_id');
+            $table->string('image');
             $table->timestamps();
         });
     }
