@@ -15,7 +15,7 @@ class BoardingHouseController extends Controller
     //get data boarding house for admin kost
     public function index()
     {
-        return new BoardingHouseCollection(BoardingHouse::where('user_id', Auth::user()->id)->paginate(10));
+        return new BoardingHouseCollection(BoardingHouse::where('user_id', Auth::user()->id)->get());
     }
 
     public function store(Request $request)
