@@ -20,6 +20,13 @@ class CreateReviewsTable extends Migration
             $table->text('comment');
             $table->unsignedBigInteger('created_by');
             $table->timestamps();
+
+            $table->foreign('boarding_house_id')->references('id')
+                ->on('boarding_houses')
+                ->onDelete('cascade');
+            $table->foreign('created_by')->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 

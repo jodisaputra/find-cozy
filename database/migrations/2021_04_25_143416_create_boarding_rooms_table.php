@@ -20,6 +20,10 @@ class CreateBoardingRoomsTable extends Migration
             $table->enum('status', ['available', 'not_available']);
             $table->bigInteger('price');
             $table->timestamps();
+
+            $table->foreign('boarding_house_id')->references('id')
+                ->on('boarding_houses')
+                ->onDelete('cascade');
         });
     }
 

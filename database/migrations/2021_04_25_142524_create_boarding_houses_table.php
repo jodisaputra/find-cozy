@@ -21,6 +21,10 @@ class CreateBoardingHousesTable extends Migration
             $table->string('map_url')->nullable();
             $table->string('city');
             $table->timestamps();
+
+            $table->foreign('user_id')->references('id')
+                ->on('users')
+                ->onDelete('cascade');
         });
     }
 
