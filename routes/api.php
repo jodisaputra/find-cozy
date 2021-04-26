@@ -28,14 +28,24 @@ Route::prefix('auth')->group(function () {
     Route::post('/profilephoto', 'API\LoginController@updatephoto')->middleware('auth:api');
 });
 
-//boarding house
+//boarding house admin
 Route::get('boardinghouse', 'API\BoardingHouseController@index')->middleware('auth:api');
 Route::post('boardinghouse', 'API\BoardingHouseController@store')->middleware('auth:api');
 Route::put('boardinghouse/{boardinghouse_id}', 'API\BoardingHouseController@update')->middleware('auth:api');
 Route::delete('boardinghouse/{boardinghouse_id}', 'API\BoardingHouseController@destroy')->middleware('auth:api');
+
+//boarding house user
+
 
 //boarding room
 Route::get('boardingroom/{boardinghouse_id}', 'API\BoardingRoomController@index')->middleware('auth:api');
 Route::post('boardingroom/{boardinghouse_id}', 'API\BoardingRoomController@store')->middleware('auth:api');
 Route::put('boardingroom/{boardingroom_id}', 'API\BoardingRoomController@update')->middleware('auth:api');
 Route::delete('boardingroom/{boardingroom_id}', 'API\BoardingRoomController@destroy')->middleware('auth:api');
+
+//boarding image
+Route::get('boardinghouseimage/{boardinghouse_id}', 'API\BoardingHouseImageController@index')->middleware('auth:api');
+Route::post('boardinghouseimage/{boardinghouse_id}', 'API\BoardingHouseImageController@store')->middleware('auth:api');
+Route::post('boardinghouseimageupdate/{boardingroom_id}', 'API\BoardingHouseImageController@update')->middleware('auth:api');
+Route::delete('boardinghouseimage/{boardingroom_id}', 'API\BoardingHouseImageController@destroy')->middleware('auth:api');
+
