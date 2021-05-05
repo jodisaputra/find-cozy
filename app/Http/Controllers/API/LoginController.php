@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\User;
@@ -116,7 +117,7 @@ class LoginController extends Controller
         $token->expires_at = Carbon::now()->addWeek(1);
         $token->save();
 
-        return response([
+        return ResponseFormatter::success([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'expires_at' => Carbon::parse($token->expires_at)->toDateTimeString()
