@@ -4,15 +4,34 @@ namespace App\Http\Controllers\API;
 
 use App\BoardingHouseImage;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BoardingHouseImageCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\ResponseFormatter;
 
 class BoardingHouseImageController extends Controller
 {
-    public function index($boarding_house_id)
+    public function index(Request $request)
     {
-        return new BoardingHouseImageCollection(BoardingHouseImage::where('boarding_house_id', $boarding_house_id)->get());
+        $id = $request->input('id');
+        $limit = $request->input('limit', 6);
+
+        if($id)
+        {
+            $image = BoardingHouseImage::find($id);
+
+            if($image)
+            {
+                return ResponseFormatter::success($image, 'Data gambar kos berhasil diambil');
+            }
+            else
+            {
+                return ResponseFormatter::error(null, 'data gambar kos tidak ada', 404);
+            }
+        }
+
+        $image = BoardingHouseImage::query();
+
+        return ResponseFormatter::success($image->paginate($limit), 'Data gambar kos berhasil diambil');
     }
 
     public function store(Request $request, $boarding_house_id)
@@ -23,40 +42,40 @@ class BoardingHouseImageController extends Controller
 
         if($validator->fails())
         {
-            return response(['errors' => $validator->errors()], 422);
+            return ResponseFormatter::error($validator->errors(), 'Gagal');
         }
 
-        $boardinghouseimage = new BoardingHouseImage();
-        $boardinghouseimage->boarding_house_id = $boarding_house_id;
+        $image = new BoardingHouseImage();
+        $image->boarding_house_id = $boarding_house_id;
 
         if($request->file('image'))
         {
             $file = $request->file('image')->store('houseimage', 'public');
-            $boardinghouseimage->image = $file;
+            $image->image = $file;
         }
 
-        $boardinghouseimage->save();
+        $image->save();
 
-        return $boardinghouseimage;
+        return ResponseFormatter::success($image, 'Data gambar kos berhasil diambil');
     }
 
     public function update(Request $request, $boardinghouseimage_id)
     {
-        $boardinghouseimage = BoardingHouseImage::find($boardinghouseimage_id);
+        $image = BoardingHouseImage::find($boardinghouseimage_id);
 
         if($request->file('image'))
         {
             $file = $request->file('image')->store('houseimage', 'public');
-            $boardinghouseimage->image = $file;
+            $image->image = $file;
         }
 
         $data = [
             'image' => $file
         ];
 
-        $boardinghouseimage->update($data);
+        $image->update($data);
 
-        return $boardinghouseimage;
+        return ResponseFormatter::success($image, 'Data gambar behasil diubah');
     }
 
     public function destroy($boardinghouseimage_id)
@@ -65,6 +84,6 @@ class BoardingHouseImageController extends Controller
 
         $boardinghouseimage->delete();
 
-        return response(['message' => 'success']);
+        return ResponseFormatter::success('data berhasil dihapus');
     }
 }

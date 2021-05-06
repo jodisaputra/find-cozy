@@ -18,10 +18,6 @@ class CreateFacilitiesTable extends Migration
             $table->unsignedBigInteger('boarding_house_id');
             $table->string('facility_name');
             $table->timestamps();
-
-            $table->foreign('boarding_house_id')->references('id')
-                ->on('boarding_houses')
-                ->onDelete('cascade');
         });
     }
 

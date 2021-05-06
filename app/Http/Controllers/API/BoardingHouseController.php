@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\API;
 
 use App\BoardingHouse;
+use App\Helpers\ResponseFormatter;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BoardingHouseCollection;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -12,10 +12,37 @@ use Illuminate\Support\Facades\Validator;
 
 class BoardingHouseController extends Controller
 {
-    //get data boarding house for admin kost
-    public function index()
+    //get data boarding house for user kost
+    public function index(Request $request)
     {
-        return new BoardingHouseCollection(BoardingHouse::where('user_id', Auth::user()->id)->get());
+        $id = $request->input('id');
+        $limit = $request->input('limit', 6);
+
+        if($id)
+        {
+            $boardinghouse = BoardingHouse::find($id);
+
+            if($boardinghouse)
+            {
+                return ResponseFormatter::success($boardinghouse, 'Data kos berhasil diambil');
+            }
+            else
+            {
+                return ResponseFormatter::error(null, 'data kos tidak ada', 404);
+            }
+        }
+
+        $boardinghouse = BoardingHouse::query();
+
+        return ResponseFormatter::success($boardinghouse->paginate($limit), 'Data kos berhasil diambil');
+    }
+
+    // get data untuk admin
+    public function getAdmin()
+    {
+        $boardinghouse = BoardingHouse::where('user_id', Auth::user()->id);
+
+        return ResponseFormatter::success($boardinghouse, 'data kos berhasil diambil');
     }
 
     public function store(Request $request)
@@ -29,7 +56,7 @@ class BoardingHouseController extends Controller
 
         if($validator->fails())
         {
-            return response(['errors' => $validator->errors()], 422);
+           return ResponseFormatter::error($validator->errors(), 422);
         }
 
         $boardinghouse = new BoardingHouse();
@@ -41,7 +68,7 @@ class BoardingHouseController extends Controller
 
         $boardinghouse->save();
 
-        return $boardinghouse;
+        return ResponseFormatter::success($boardinghouse, 'Data kos berhasil disimpan');
     }
 
     public function update(Request $request, $boardinghouse_id)
@@ -52,7 +79,7 @@ class BoardingHouseController extends Controller
 
         $boardinghouse->update($data);
 
-        return $boardinghouse;
+        return ResponseFormatter::success($boardinghouse, 'Data kos berhasil disimpan');
     }
 
     public function destroy($boardinghouse_id)
@@ -61,6 +88,6 @@ class BoardingHouseController extends Controller
 
         $boardinghouse->delete();
 
-        return response(['message' => 'success']);
+        return ResponseFormatter::success(null, 'Data kos berhasil dihapus');
     }
 }

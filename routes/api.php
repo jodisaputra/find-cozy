@@ -28,14 +28,13 @@ Route::prefix('auth')->group(function () {
     Route::post('/profilephoto', 'API\LoginController@updatephoto')->middleware('auth:api');
 });
 
-//boarding house admin
-Route::get('boardinghouse', 'API\BoardingHouseController@index')->middleware('auth:api');
+//boarding house user
+Route::get('boardinghouse', 'API\BoardingHouseController@index');
 Route::post('boardinghouse', 'API\BoardingHouseController@store')->middleware('auth:api');
 Route::put('boardinghouse/{boardinghouse_id}', 'API\BoardingHouseController@update')->middleware('auth:api');
 Route::delete('boardinghouse/{boardinghouse_id}', 'API\BoardingHouseController@destroy')->middleware('auth:api');
 
-//boarding house user
-
+//boarding house admin
 
 //boarding room
 Route::get('boardingroom/{boardinghouse_id}', 'API\BoardingRoomController@index')->middleware('auth:api');
@@ -49,3 +48,7 @@ Route::post('boardinghouseimage/{boardinghouse_id}', 'API\BoardingHouseImageCont
 Route::post('boardinghouseimageupdate/{boardingroom_id}', 'API\BoardingHouseImageController@update')->middleware('auth:api');
 Route::delete('boardinghouseimage/{boardingroom_id}', 'API\BoardingHouseImageController@destroy')->middleware('auth:api');
 
+// Favorite user
+Route::get('favorite', 'API\FavoritesController@index')->middleware('auth:api');
+Route::post('favorite/{favorite_id}', 'API\FavoritesController@store')->middleware('auth:api');
+Route::delete('favorite/{favorite_id}', 'API\FavoritesController@destroy')->middleware('auth:api');

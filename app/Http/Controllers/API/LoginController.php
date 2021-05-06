@@ -26,7 +26,7 @@ class LoginController extends Controller
 
         if($validator->fails())
         {
-            return response(['errors' => $validator->errors()], 422);
+            return ResponseFormatter::error($validator->errors(), 422);
         }
 
         $user = new User();

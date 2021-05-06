@@ -3,16 +3,35 @@
 namespace App\Http\Controllers\API;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\BoardingRoomCollection;
 use Illuminate\Http\Request;
 use App\BoardingRoom;
 use Illuminate\Support\Facades\Validator;
+use App\Helpers\ResponseFormatter;
 
 class BoardingRoomController extends Controller
 {
-    public function index($boarding_house_id)
+    public function index(Request $request)
     {
-        return new BoardingRoomCollection(BoardingRoom::where('boarding_house_id', $boarding_house_id)->get());
+        $id = $request->input('id');
+        $limit = $request->input('limit', 6);
+
+        if($id)
+        {
+            $room = BoardingRoom::find($id);
+
+            if($room)
+            {
+                return ResponseFormatter::success($room, 'Data kamar kos berhasil diambil');
+            }
+            else
+            {
+                return ResponseFormatter::error(null, 'Data kamar kos tidak ada', 404);
+            }
+        }
+
+        $room = BoardingRoom::query();
+
+        return ResponseFormatter::success($room->paginate($limit), 'Data kamar kos berhasil diambil');
     }
 
     public function store(Request $request, $boarding_house_id)
@@ -25,7 +44,7 @@ class BoardingRoomController extends Controller
 
         if($validator->fails())
         {
-            return response(['errors' => $validator->errors()], 422);
+           return ResponseFormatter::error($validator->errors(), 442);
         }
 
         $boardingroom = new BoardingRoom();
@@ -36,7 +55,7 @@ class BoardingRoomController extends Controller
 
         $boardingroom->save();
 
-        return $boardingroom;
+        return ResponseFormatter::success($boardingroom, 'Data kamar kos berhasil disimpan');
     }
 
     public function update(Request $request, $boardingroom_id)
@@ -47,7 +66,7 @@ class BoardingRoomController extends Controller
 
         $boardingroom->update($data);
 
-        return $boardingroom;
+        return ResponseFormatter::success($boardingroom, 'Data kamar kos berhasil diubah');
     }
 
     public function destroy($boardingroom_id)
@@ -56,6 +75,6 @@ class BoardingRoomController extends Controller
 
         $boardingroom->delete();
 
-        return response(['message' => 'success']);
+        return ResponseFormatter::success('Data kamar kos berhasil dihapus');
     }
 }

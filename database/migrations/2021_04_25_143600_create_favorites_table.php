@@ -18,13 +18,6 @@ class CreateFavoritesTable extends Migration
             $table->unsignedBigInteger('boarding_house_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
-
-            $table->foreign('boarding_house_id')->references('id')
-                ->on('boarding_houses')
-                ->onDelete('cascade');
-            $table->foreign('user_id')->references('id')
-                ->on('users')
-                ->onDelete('cascade');
         });
     }
 
