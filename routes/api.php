@@ -52,3 +52,8 @@ Route::delete('boardinghouseimage/{boardingroom_id}', 'API\BoardingHouseImageCon
 Route::get('favorite', 'API\FavoritesController@index')->middleware('auth:api');
 Route::post('favorite/{favorite_id}', 'API\FavoritesController@store')->middleware('auth:api');
 Route::delete('favorite/{favorite_id}', 'API\FavoritesController@destroy')->middleware('auth:api');
+
+// Favorite user
+Route::get('review', 'API\ReviewController@index')->middleware('auth:api');
+Route::post('review/{review_id}', 'API\ReviewController@store')->middleware('auth:api');
+Route::delete('review/{review_id}', 'API\ReviewController@destroy')->middleware('auth:api');
